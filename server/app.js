@@ -16,6 +16,12 @@ app.get('/api/readings', (req, res) => {
     let start = req.query.start;
     let end = req.query.end;
     let location = req.query.location;
+
+    // TODO
+})
+
+app.post('/api/import/json', (req, res) => {
+    // TODO: import json from request body
 })
 
 app.listen(PORT, () => {
