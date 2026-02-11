@@ -5,10 +5,6 @@ const PORT = 3000
 
 app.use(express.json())
 
-app.get('/', (req, res) => {
-  res.send('Hello World from Express!');
-});
-
 app.get('/api/health', (req, res) => {
     res.send({
         "status": "ok",
@@ -18,22 +14,17 @@ app.get('/api/health', (req, res) => {
 
 ////
 
-function isIsoDate(str) {
-  return (/\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\dZ/.test(str));
-}
-
 var fs = require('fs'); // TODO: fix database connection
 let clean_data = (path = "./energy_dump.json") => {
     return JSON.parse(fs.readFileSync(path, 'utf8')).filter(record => {
-        return (
-            isIsoDate(record.timestamp)
-            && typeof record.price_eur_mwh == "number" 
-            && (typeof record.price == "number" || !record.price)
-        );
+        return Date.parse(record.timestamp) && typeof record.price_eur_mwh == "number";
     }).map(record => {
-        if (!record.location) { record.location = "EE" };
-        return record;
-    });
+        return {
+            "location": record.location || "EE",
+            "timestamp": (new Date(Date.parse(record.timestamp))).toISOString().slice(0, -4) + 'Z',
+            "price_eur_mwh": record.price_eur_mwh
+        }
+    })
 }
 
 let data = clean_data();
@@ -43,14 +34,29 @@ let data = clean_data();
 app.get('/api/readings', (req, res) => {
     let start = req.query.start;
     let end = req.query.end;
-    let location = req.query.location;
+    let fields = req.query.fields;
 
-    res.send(data.filter(()=>{false}))
+    res.send(data.filter(record => {
+        return (
+            record.timestamp >= start
+            && record.timestamp <= end
+            && record.location === fields
+        )
+    }))
 })
+
+app.post('/api/sync/prices', (req, res) => {
+    let start = new Date(req.query.start).setHours(0, 0, 0, 0);
+    let end = new Date(req.query.end).setHours(23, 59, 59, 999);
+    let location = req.query.location || 'EE';
+    
+    console.log(start, end, fields);
+})
+
 
 app.post('/api/import/json', (req, res) => {
     // TODO: import json from request body
-})
+})    
 
 app.listen(PORT, () => {
   console.log(`Server is listening on port ${PORT}`)
