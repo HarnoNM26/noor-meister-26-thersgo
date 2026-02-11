@@ -12,10 +12,17 @@ app.get('/api/health', (req, res) => {
     })
 })
 
+app.get('/api/readings', (req, res) => {
+    let start = req.query.start;
+    let end = req.query.end;
+    let location = req.query.location;
+})
+
 app.listen(PORT, () => {
   console.log(`Server is listening on port ${PORT}`)
 })
 
+////
 
 function isIsoDate(str) {
   return (/\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\dZ/.test(str));
