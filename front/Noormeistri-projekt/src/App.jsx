@@ -14,9 +14,7 @@ function App() {
   return (
     <>
       <h1>Energy monitor</h1>
-      <p>
-        {status == 200 ? "Backend OK" : status}
-      </p>
+      <p>{status == 200 ? "Backend OK" : status}</p>
     </>
   )
 }
