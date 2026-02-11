@@ -1,18 +1,27 @@
-import { useState } from 'react';
-import axios from 'axios';
+import { useState, useEffect } from 'react';
 import './App.css';
+const PORT = 8080;
+
+let times = 0
 
 function App() {
-  const [status, setStatus] = useState("please wait...");
+  const [status, setStatus] = useState({});
 
-  fetch("http://localhost:3000/api/health").then(res => {
-    setStatus(res.status);
-  })
- 
+  useEffect(() =>{
+    fetch(`http://localhost:${PORT}/api/health`)
+      .then(res => res.json())
+      .then(res => setStatus(res))
+  }, [])
+  
+  console.log(times++, status);
+
   return (
     <>
       <h1>Energy monitor</h1>
-      <p>{status.status == 200 ? "Backend OK" : status.status}</p>
+      <p>{
+        status.status === "ok" ? "Backend OK!" :
+        status.status
+      }</p>
     </>
   )
 }

@@ -1,11 +1,14 @@
 const express = require('express')
 const cors = require('cors');
-const app = express()
-const PORT = 3000
+const app = express();
+const PORT = 8080;
 
 app.use(express.json())
+app.use(cors())
 
 app.get('/api/health', (req, res) => {
+    console.log("Server has been asked for status.");
+
     res.send({
         "status": "ok",
         "db": "ok"
@@ -59,5 +62,5 @@ app.post('/api/import/json', (req, res) => {
 })    
 
 app.listen(PORT, () => {
-  console.log(`Server is listening on port ${PORT}`)
+  console.log(`Server is listening on port ${PORT}.`)
 })
