@@ -1,7 +1,12 @@
 # Energy monitor
 By Henri Kangro
 
-##
+## parts
+### Monitor
+The react webapp
+
+### Server
+Accesses and filters the database
 
 ## tools used
 - the MERN stack:
