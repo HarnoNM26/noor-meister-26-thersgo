@@ -26,15 +26,15 @@ function App() {
     return <>
       <h1>Energy monitor</h1>
       <h2>Elering Price syncronizer</h2>
-      <form>
-        <label for="start">start time: </label>
+      <form method="POST" action={`http://localhost:${PORT}/api/sync/prices`}>
+        <label htmlFor="start">start time: </label>
         <input type="datetime-local" name="date-start" id="date-start" />
         <br/>
-        <label for="end">end time: </label>
+        <label htmlFor="end">end time: </label>
         <input type="datetime-local" name="date-start" id="date-start" />
         <br/>
-        <label for="location">location:</label>
-        <select id="locations" name="locations">
+        <label htmlFor="fields">location:</label>
+        <select id="location" name="location">
           <option value="EE">EE</option>
           <option value="LV">LV</option>
           <option value="LT">LT</option>
