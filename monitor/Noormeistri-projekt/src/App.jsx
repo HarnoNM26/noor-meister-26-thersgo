@@ -5,12 +5,12 @@ import './App.css';
 function App() {
   const [status, setStatus] = useState("please wait...");
 
-  axios.get("https://localhost:3000/api/health", {
-    signal: AbortSignal.timeout(5000)
+  axios.get("http://localhost:3000/api/health").catch(err => {
+    setStatus(err);
   }).then(res => {
     setStatus(res.status);
   })
-
+ 
   return (
     <>
       <h1>Energy monitor</h1>

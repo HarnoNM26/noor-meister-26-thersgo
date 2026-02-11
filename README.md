@@ -7,6 +7,7 @@ The react webapp
 
 ### Server
 Accesses and filters the database
+run with `node ./server/app.js`
 
 ## tools used
 - the MERN stack:
