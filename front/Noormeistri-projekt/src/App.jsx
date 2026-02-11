@@ -5,7 +5,9 @@ import './App.css';
 function App() {
   const [status, setStatus] = useState("please wait...");
 
-  axios.get("https://localhost:3000/api/health").then(res => {
+  axios.get("https://localhost:3000/api/health", {
+    signal: AbortSignal.timeout(5000)
+  }).then(res => {
     setStatus(res.status);
   })
 
