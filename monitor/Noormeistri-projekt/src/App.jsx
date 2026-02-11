@@ -5,7 +5,7 @@ import './App.css';
 function App() {
   const [status, setStatus] = useState("please wait...");
 
-  axios.get("http://localhost:3000/api/health").catch(err => {
+  fetch("http://localhost:3000/api/health").catch(err => {
     setStatus(err);
   }).then(res => {
     setStatus(res.status);
