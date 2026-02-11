@@ -7,8 +7,6 @@ app.use(express.json())
 app.use(cors())
 
 app.get('/api/health', (req, res) => {
-    console.log("Server has been asked for status.");
-
     res.send({
         "status": "ok",
         "db": "ok"
@@ -49,11 +47,18 @@ app.get('/api/readings', (req, res) => {
 })
 
 app.post('/api/sync/prices', (req, res) => {
-    let start = new Date(req.query.start).setHours(0, 0, 0, 0);
-    let end = new Date(req.query.end).setHours(23, 59, 59, 999);
-    let location = req.query.location || 'EE';
+    let start = (req.query.start);
+    let end = (req.query.end);
+    let fields = (req.query.fields || 'EE').toLowerCase();
     
-    console.log(start, end, fields);
+    fetch(
+        `http://dashboard.elering.ee/api/nps/price?start=${start}&end=${end}&fields=${fields}`
+    ).then(res => res.json())
+    .then(prices => {
+        console.log(prices.data[fields]);
+
+        res.status(200).send("synced prices!\n");
+    })
 })
 
 
