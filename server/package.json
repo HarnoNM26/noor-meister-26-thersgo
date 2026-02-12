@@ -1,5 +1,5 @@
 {
-  "name": "noormeister-server",
+  "name": "energy-monitor-server",
   "version": "1.0.0",
   "description": "",
   "license": "ISC",
@@ -13,5 +13,8 @@
     "cors": "^2.8.6",
     "express": "^5.2.1",
     "mongoose": "^9.2.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.11"
   }
 }
