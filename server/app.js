@@ -64,13 +64,17 @@ app.post('/api/sync/prices', (req, res) => {
     `http://dashboard.elering.ee/api/nps/price?start=${start}&end=${end}`
   ).then(res => res.json())
    .then(prices => {
-    prices.data[fields.toLowerCase].map(record => {
+    prices.data[fields.toLowerCase()].map(record => {
       EnergyReading.create({
-
+        timestamp: new Date(record.timestamp).toISOString().slice(0, -5) + 'Z',
+        location: fields,
+        price_eur_mwh: record.price,
+        source: 'API',
+        created_at: new Date(Date.now()).toISOString().slice(0, -5)+'Z'
       })
     })
 
-    res.status(200).send("synced prices!\n");
+    res.status(200);
   })
 })
 
