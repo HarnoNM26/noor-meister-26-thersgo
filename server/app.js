@@ -15,6 +15,10 @@ app.get('/api/health', (req, res) => {
 
 ////
 
+function cutMs(date) {
+    return date.toISOString().slice(0, -5) + 'Z'
+}
+
 var fs = require('fs'); // TODO: fix database connection
 let clean_data = (path = "./energy_dump.json") => {
     return JSON.parse(fs.readFileSync(path, 'utf8')).filter(record => {
@@ -22,7 +26,7 @@ let clean_data = (path = "./energy_dump.json") => {
     }).map(record => {
         return {
             "location": record.location || "EE",
-            "timestamp": (new Date(Date.parse(record.timestamp))).toISOString().slice(0, -4) + 'Z',
+            "timestamp": cutMs((new Date(Date.parse(record.timestamp)))),
             "price_eur_mwh": record.price_eur_mwh
         }
     })
@@ -47,12 +51,15 @@ app.get('/api/readings', (req, res) => {
 })
 
 app.post('/api/sync/prices', (req, res) => {
-    let start = (req.query.start);
-    let end = (req.query.end);
+    let start = req.query.start
+    if (!start) { start = new Date(Date.now()).toISOString().slice(0, -13) + "00:00:00Z" }
+    let end = req.query.end;
+    if (!end) { end = new Date(Date.now()).toISOString().slice(0, -13) + "23:59:59Z" }
+
     let fields = (req.query.fields || 'EE').toLowerCase();
     
     fetch(
-        `http://dashboard.elering.ee/api/nps/price?start=${start}&end=${end}&fields=${fields}`
+        `http://dashboard.elering.ee/api/nps/price?start=${start}&end=${end}`
     ).then(res => res.json())
     .then(prices => {
         console.log(prices.data[fields]);

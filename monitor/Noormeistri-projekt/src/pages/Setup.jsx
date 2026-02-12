@@ -2,8 +2,6 @@ import { useState, useEffect } from 'react';
 import './Setup.css';
 const PORT = 8080;
 
-let times = 0
-
 function App() {
   const [status, setStatus] = useState({});
 
@@ -16,7 +14,24 @@ function App() {
       .then(res => setStatus(res))
   }, [])
   
-  console.log(times++, status);
+  const sendSync = e => {
+      const form = new FormData(e.target);
+      let start = form.get("start")
+      let end = form.get("end")
+
+      fetch(
+        `http://localhost:${PORT}/api/sync/prices?`
+          + "start="   + (start ? start + "T00:00Z" : "")
+          + "&end="    + (end ? end + "T00:00Z" : "")
+          + "&fields=" + form.get("location"),
+      {
+        "method": "POST"
+      })
+
+      console.log("sending!")
+
+      return false
+  };
 
   if (status.status != "ok") {
     return <>
@@ -26,12 +41,12 @@ function App() {
     return <>
       <h1>Energy monitor</h1>
       <h2>Elering Price syncronizer</h2>
-      <form method="POST" action={`http://localhost:${PORT}/api/sync/prices`}>
+      <form onSubmit={sendSync}>
         <label htmlFor="start">start time: </label>
-        <input type="datetime-local" name="date-start" id="date-start" />
+        <input type="date" name="start" id="start" />
         <br/>
         <label htmlFor="end">end time: </label>
-        <input type="datetime-local" name="date-start" id="date-start" />
+        <input type="date" name="end" id="end" />
         <br/>
         <label htmlFor="fields">location:</label>
         <select id="location" name="location">
