@@ -47,25 +47,28 @@ app.get('/api/health', (req, res) => {
 //*/
 
 app.get('/api/readings', (req, res) => {
-  res.send(EnergyReading.find({
-    timestamp: { $gte: req.query.start, $lte: req.query.end },
-    location: req.query.fields
-  }))
+  res.send(
+    EnergyReading.find({
+      timestamp: { $gte: req.query.start, $lte: req.query.end },
+      location: req.query.fields
+    }).exec()
+  )
 })
 
 app.post('/api/sync/prices', (req, res) => {
   let start = req.query.start || new Date(Date.now()).toISOString().slice(0, -13) + "00:00:00Z";
   let end = req.query.end || new Date(Date.now()).toISOString().slice(0, -13) + "23:59:59Z";
-  let fields = (req.query.fields || 'EE');
-  
+  let fields = req.query.location || 'EE';
+
   fetch(
     `http://dashboard.elering.ee/api/nps/price?start=${start}&end=${end}`
-  ).then(res => {
-    console.assert(res.statusText === 'OK')
+  ).then(res => res.json())
+   .then(prices => {
+    prices.data[fields.toLowerCase].map(record => {
+      EnergyReading.create({
 
-    return res.json()
-  }).then(prices => {
-    console.log(prices.data[fields.toLowerCase()]);
+      })
+    })
 
     res.status(200).send("synced prices!\n");
   })
