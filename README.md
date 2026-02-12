@@ -11,8 +11,8 @@ run with `node ./server/app.js`
 
 ## tools used
 - the MERN stack:
-    - MongoDB for the database,
-    - Express to form the API,
+    - MongoDB for the database, accessed through the mongoose library,
+    - Expressjs to form the server API,
     - React for rendering the website,
-        - and Tailwind to style it quickly, and keep styles connected to their components;
+        - and Tailwind to style it quickly, keeping styles connected to their components;
     - NodeJS for the server-side applications.

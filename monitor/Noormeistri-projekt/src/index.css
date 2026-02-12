@@ -13,10 +13,18 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
+  padding: 4rem;
+
   display: flex;
   place-items: center;
+  justify-content: center;
+
   min-width: 320px;
   min-height: 100vh;
 }
@@ -24,11 +32,4 @@ body {
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
 }
